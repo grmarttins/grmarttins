@@ -9,6 +9,7 @@ frozen state for Quick Look previews.
 """
 import html
 import os
+import textwrap
 
 import json
 
@@ -81,20 +82,20 @@ def rise(inner, i):
             f'begin="{delay:.2f}s" dur="0.4s" fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/></g>')
 
 
-parts = [
-    f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" '
-    f'font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">',
-    '<defs>'
-    f'<linearGradient id="ibg" x1="0" y1="0" x2="0" y2="1">'
-    f'<stop offset="0" stop-color="{BG2}"/><stop offset="1" stop-color="{BG}"/></linearGradient></defs>',
-    f'<rect width="{W}" height="{H}" rx="12" fill="url(#ibg)"/>',
-    f'<rect x="0.5" y="0.5" width="{W-1}" height="{H-1}" rx="12" fill="none" stroke="{FRAME}"/>',
-    f'<line x1="0" y1="{TITLEBAR_H}" x2="{W}" y2="{TITLEBAR_H}" stroke="{FRAME}"/>',
-]
-for i, dotcol in enumerate(["#ff5f56", "#ffbd2e", "#27c93f"]):
-    parts.append(f'<circle cx="{PAD + i*16}" cy="{TITLEBAR_H/2}" r="5" fill="{dotcol}"/>')
-parts.append(f'<text x="{W/2}" y="{TITLEBAR_H/2 + 4}" fill="{MUTED}" font-size="12" '
-             f'text-anchor="middle">{USER}@github: ~$ neofetch</text>')
+CHAR_W = 7.6  # largura aproximada de um caractere monoespaçado em 12.5px
+body = []
+
+
+def wrap(text, x):
+    """quebra o texto em linhas que cabem entre x e a borda direita"""
+    max_chars = max(10, int((W - PAD - x) / CHAR_W))
+    return textwrap.wrap(text, max_chars, break_on_hyphens=False) or [""]
+
+
+def tspans(lines, x):
+    return "".join(f'<tspan x="{x}" dy="{0 if j == 0 else LINE_H}">{esc(l)}</tspan>'
+                   for j, l in enumerate(lines))
+
 
 y = TITLEBAR_H + 30
 for i, row in enumerate(ROWS):
@@ -116,17 +117,39 @@ for i, row in enumerate(ROWS):
                  f'<line x1="{KEY_X + 12 + len(row[1])*8}" y1="{y-4:.1f}" x2="{W-PAD}" y2="{y-4:.1f}" '
                  f'stroke="{FRAME}" stroke-opacity="0.8"/>')
     elif kind == "kv":
-        key, val = esc(row[1]), esc(row[2])
+        key = esc(row[1])
+        lines = wrap(row[2], VAL_X)
         inner = (f'<text x="{KEY_X}" y="{y:.1f}" fill="{KEY}" font-size="12.5" font-weight="700">{key}</text>'
-                 f'<text x="{VAL_X}" y="{y:.1f}" fill="{INK}" font-size="12.5">{val}</text>')
+                 f'<text y="{y:.1f}" fill="{INK}" font-size="12.5">{tspans(lines, VAL_X)}</text>')
+        y += LINE_H * (len(lines) - 1)
     elif kind == "bul":
-        txt = esc(row[1])
+        lines = wrap(row[1], KEY_X + 14)
         inner = (f'<circle cx="{KEY_X+3}" cy="{y-4:.1f}" r="2.5" fill="{GREEN}"/>'
-                 f'<text x="{KEY_X+14}" y="{y:.1f}" fill="{INK}" font-size="12.5">{txt}</text>')
+                 f'<text y="{y:.1f}" fill="{INK}" font-size="12.5">{tspans(lines, KEY_X + 14)}</text>')
+        y += LINE_H * (len(lines) - 1)
     else:
         continue
-    parts.append(rise(inner, i))
+    body.append(rise(inner, i))
     y += LINE_H
+
+# o cartão cresce para baixo se o conteúdo não couber na altura padrão
+H = max(H, int(y + 10))
+parts = [
+    f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" '
+    f'font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">',
+    '<defs>'
+    f'<linearGradient id="ibg" x1="0" y1="0" x2="0" y2="1">'
+    f'<stop offset="0" stop-color="{BG2}"/><stop offset="1" stop-color="{BG}"/></linearGradient></defs>',
+    f'<rect width="{W}" height="{H}" rx="12" fill="url(#ibg)"/>',
+    f'<rect x="0.5" y="0.5" width="{W-1}" height="{H-1}" rx="12" fill="none" stroke="{FRAME}"/>',
+    f'<line x1="0" y1="{TITLEBAR_H}" x2="{W}" y2="{TITLEBAR_H}" stroke="{FRAME}"/>',
+]
+for i, dotcol in enumerate(["#ff5f56", "#ffbd2e", "#27c93f"]):
+    parts.append(f'<circle cx="{PAD + i*16}" cy="{TITLEBAR_H/2}" r="5" fill="{dotcol}"/>')
+parts.append(f'<text x="{W/2}" y="{TITLEBAR_H/2 + 4}" fill="{MUTED}" font-size="12" '
+             f'text-anchor="middle">{USER}@github: ~$ neofetch</text>')
+
+parts += body
 
 parts.append("</svg>")
 svg = "".join(parts)
