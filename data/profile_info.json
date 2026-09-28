@@ -1,0 +1,23 @@
+{
+  "username": "grmarttins",
+  "rows": [
+    ["host"],
+    ["kv", "Nome", "Gustavo Rodrigues Martins"],
+    ["kv", "Cargo", "Profissional de Dados | Analytics & Engineering"],
+    ["kv", "Foco", "Engenharia de Dados"],
+    ["kv", "Local", "Bebedouro - SP, Brasil"],
+    ["gap"],
+    ["sec", "Stack"],
+    ["kv", "Linguagens", "Python, SQL, PySpark"],
+    [
+      "kv",
+      "Dados",
+      "Databricks, Airflow, Power BI, dbt, AWS, PostgreSQL, MySQL"
+    ],
+    ["kv", "Infra", "Docker, Git/GitHub, APIs REST"],
+    ["gap"],
+    ["sec", "Destaques"],
+    ["bul", "Pós em Engenharia de Dados (PUC Minas)"],
+    ["bul", "Aberto a vagas remotas, híbridas e presenciais"]
+  ]
+}
