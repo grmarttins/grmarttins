@@ -1,22 +1,22 @@
 {
   "username": "grmarttins",
-  "generated_at": "2026-10-10T12:29:33Z",
+  "generated_at": "2026-10-11T12:46:54Z",
   "range": {
-    "start": "2025-10-05",
+    "start": "2025-10-12",
+    "end": "2026-10-11"
+  },
+  "total_contributions": 47,
+  "active_days": 23,
+  "avg_per_active_day": 2.0,
+  "current_streak": {
+    "length": 13,
+    "start": "2026-09-28",
     "end": "2026-10-10"
   },
-  "total_contributions": 46,
-  "active_days": 22,
-  "avg_per_active_day": 2.1,
-  "current_streak": {
-    "length": 12,
-    "start": "2026-09-28",
-    "end": "2026-10-09"
-  },
   "longest_streak": {
-    "length": 12,
+    "length": 13,
     "start": "2026-09-28",
-    "end": "2026-10-09"
+    "end": "2026-10-10"
   },
   "best_day": {
     "date": "2026-07-03",
@@ -73,38 +73,10 @@
     },
     {
       "month": "2026-10",
-      "total": 10
+      "total": 11
     }
   ],
   "days": [
-    {
-      "date": "2025-10-05",
-      "count": 0
-    },
-    {
-      "date": "2025-10-06",
-      "count": 0
-    },
-    {
-      "date": "2025-10-07",
-      "count": 0
-    },
-    {
-      "date": "2025-10-08",
-      "count": 0
-    },
-    {
-      "date": "2025-10-09",
-      "count": 0
-    },
-    {
-      "date": "2025-10-10",
-      "count": 0
-    },
-    {
-      "date": "2025-10-11",
-      "count": 0
-    },
     {
       "date": "2025-10-12",
       "count": 0
@@ -1559,6 +1531,10 @@
     },
     {
       "date": "2026-10-10",
+      "count": 1
+    },
+    {
+      "date": "2026-10-11",
       "count": 0
     }
   ]
